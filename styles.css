@@ -1,0 +1,72 @@
+body {
+    min-height: 95vh;
+    background-color: honeydew;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+h1 {
+    text-align: center;
+    margin: 50px auto;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    gap: 75px;
+}
+
+/* Control box styling */
+
+.controls {
+    border: 3px solid gray;
+    max-height: 600px;
+    width: 500px;
+    padding: 10px;
+}
+.yearCon, .teamCon {
+    border: 2px solid red;
+}
+.yearCon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    width: 100%;
+    margin-bottom: 50px;
+    
+}
+#yearSlider {
+    appearance: none;
+    width: 100%;
+    background-color: black;
+    height: 5px;
+}
+.yearCon input::-webkit-slider-thumb {
+    appearance: none;
+    height: 15px;
+    width: 15px;
+    border: 2px solid red;
+}
+.teamCon {
+    height: 400px;
+    width: 100%;
+}
+
+/* Chart box styling */
+
+.chart {
+    border: 3px solid gray;
+    height: 600px;
+    width: 600px;
+}
+
+
+
+footer {
+    margin: 25px auto;
+    
+}
+footer span {
+    font-size: larger;
+    font-weight:bold;
+}
