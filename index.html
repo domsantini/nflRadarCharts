@@ -6,15 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <script src="radar.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>    
     <title>NFL Radar Charts</title>
 </head>
 <body>    
     <h1>NFL Radar Charts</h1>
+    <button id="getdata">Get Data</button>
+    <button id="chartdata">Chart Data</button>
+    <span id="test"></span>
     <div class="container">
         <div class="controlsCon">
             <div class="yearCon">
-                <input type="range" name="yearSlider" id="yearSlider" min="2000" max="2023">
+                <input type="range" name="yearSlider" id="year1Slider" min="2000" max="2023">
+                <input type="range" name="yearSlider" id="year2Slider" min="2000" max="2023">
             </div>
             <div class="teamCon">
                 
@@ -27,8 +31,6 @@
     <footer>
         <span>Designed and created by Dominic Santini and Tyler Meyers</span>
     </footer>
-    
-
 </body>
 </html>
 
