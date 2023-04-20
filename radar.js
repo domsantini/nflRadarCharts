@@ -1,10 +1,8 @@
 const teams = ['ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE', 
             'DAL', 'DEN', 'DET', 'GB', 'HOU', 'IND', 'JAX', 'KC', 
             'LAC', 'LAR', 'LV', 'MIA', 'MIN', 'NE', 'NO', 'NYG', 
-            'NYJ', 'PHI', 'PIT', 'SEA', 'SF', 'TB', 'TEN', 'WAS']
-
-const url = 'http://127.0.0.1:5000'
-
+            'NYJ', 'PHI', 'PIT', 'SEA', 'SF', 'TB', 'TEN', 'WAS'];
+            
 const height = 250
 const width = 500
 let fragment = document.createDocumentFragment()
@@ -16,18 +14,22 @@ const chartdata = document.querySelector('#chartdata')
 const givedata = document.querySelector('#givedata')
 const span = document.querySelector('#test')
 
-let chart = false
 
+const url = 'http://127.0.0.1:5000'
 let year1 = ''
 let year2 = ''
 let team1 = ''
 let team2 = ''
 
-const categories = ['Def Passing Yds Rank', 'Def Rushing Yds Rank', 'PA Rank', 'PF Rank', 'Passing Yds Rank', 'Rushing Yds Rank']
+const categories = [
+        'Def Passing Yds Rank', 
+        'Def Rushing Yds Rank', 
+        'PA Rank', 
+        'PF Rank', 
+        'Passing Yds Rank', 
+        'Rushing Yds Rank']
 const amounts1 = []
 const amounts2 = []
-
-
 
 function generateTeams() {
     for (let i = 0; i < teams.length; i++) {
@@ -113,53 +115,89 @@ async function giveData() {
 }
 
 function makeChart() {
-    const Polar = document.getElementById('mychart').getContext('2d')
     
-    const dummyData = {
-        datasets: [{
-            label: `${year1} ${team1}`,
-            borderColor: 'rgb(1, 206, 145)',
-            backgroundColor: 'rgba(1, 206, 145, 0.2)',
+    let options = {
+        chart: {
+            width: '100%',
+            height: '100%',
+            type: 'radar',
+        },
+        series: [
+          {
+            name: `${year1} ${team1}`,
             data: amounts1
-        }, {
-            label: `${year2} ${team2}`,
-            borderColor: 'rgb(156, 69, 161)',
-            backgroundColor: 'rgba(156, 69, 161, 0.2)',
+          },
+          {
+            name: `${year2} ${team2}`,
             data: amounts2
-        }], 
+          }
+        ],
         labels: categories,
+        yaxis: {
+            labels: {
+                formatter: function (val) {
+                    return val.toFixed(0)
+                }
+            },
+            reversed: true,
+            min: 1,
+            max: 32,
+            tickAmount: 8,
+        }
     }
+      
+    let chart = new ApexCharts(document.querySelector("#chart"), options);  
+    chart.render();
     
-    if (!chart) {
-        const PolarChart = new Chart (Polar, { 
-            type: 'radar', 
-            data: dummyData, 
-            options: {
-                scale: {
-                    min: 0,
-                    max: 32,
-                    stepSize: 4,
-                },
-            }
-        })
-        
-        chart = true
-    } else {
-        
-        const PolarChart = new Chart (Polar, { 
-            type: 'radar', 
-            data: dummyData, 
-            options: {
-                scale: {
-                    min: 0,
-                    max: 32,
-                    stepSize: 4,
-                },
-            }
-        })
-    }
+      
     
-    team1 = team2 = year1 = year2 = ''
+    // const polar = document.getElementById('mychart').getContext('2d')
+    
+    // const dummyData = {
+    //     datasets: [{
+    //         label: `${year1} ${team1}`,
+    //         borderColor: 'rgb(1, 206, 145)',
+    //         backgroundColor: 'rgba(1, 206, 145, 0.2)',
+    //         data: amounts1
+    //     }, {
+    //         label: `${year2} ${team2}`,
+    //         borderColor: 'rgb(156, 69, 161)',
+    //         backgroundColor: 'rgba(156, 69, 161, 0.2)',
+    //         data: amounts2
+    //     }], 
+    //     labels: categories,
+    // }
+    
+    // if (!chart) {
+    //     const PolarChart = new Chart (Polar, { 
+    //         type: 'radar', 
+    //         data: dummyData, 
+    //         options: {
+    //             scale: {
+    //                 min: 0,
+    //                 max: 32,
+    //                 stepSize: 4,
+    //             },
+    //         }
+    //     })
+        
+    //     chart = true
+    // } else {
+        
+    //     const PolarChart = new Chart (Polar, { 
+    //         type: 'radar', 
+    //         data: dummyData, 
+    //         options: {
+    //             scale: {
+    //                 min: 0,
+    //                 max: 32,
+    //                 stepSize: 4,
+    //             },
+    //         }
+    //     })
+    // }
+    
+    // team1 = team2 = year1 = year2 = ''
 }
 
 generateTeams()
