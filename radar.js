@@ -3,7 +3,7 @@ const teams = ['ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE',
             'LAC', 'LAR', 'LV', 'MIA', 'MIN', 'NE', 'NO', 'NYG', 
             'NYJ', 'PHI', 'PIT', 'SEA', 'SF', 'TB', 'TEN', 'WAS']
 
-const url = 'http://127.0.0.1:5000/'
+const url = 'http://127.0.0.1:5000'
 
 const height = 250
 const width = 500
@@ -13,7 +13,10 @@ const year1Slider = document.querySelector('#year1Slider')
 const year2Slider = document.querySelector('#year2Slider')
 const getdata = document.querySelector('#getdata')
 const chartdata = document.querySelector('#chartdata')
+const givedata = document.querySelector('#givedata')
 const span = document.querySelector('#test')
+
+let chart = false
 
 let year1 = ''
 let year2 = ''
@@ -56,7 +59,6 @@ function generateTeams() {
         
     }
     teamCon.appendChild(fragment)
-    console.log(year1, year2, team1, team2)
 }
 
 function generateYear() {
@@ -70,28 +72,49 @@ function generateYear() {
     })
 }
 
-function getData() {
-    fetch(url)
-        .then(response => response.json())
-        .then(json => {
-            
-            string = json.split('/')
-            json1 = JSON.parse(string[0].replaceAll("'",'"'))
-            json2 = JSON.parse(string[1].replaceAll("'",'"'))
-            
-            for (let i = 0; i < categories.length; i++) {
-                amounts1[i] = json1[`${categories[i]}`]
-                amounts2[i] = json2[`${categories[i]}`]
-            }    
-            
-            year1 = json1['season']
-            year2 = json2['season']
-            team1 = json1['team']
-            team2 = json2['team']
-        })       
+async function getData() {
+    const response = await fetch(url)
+    const data = await response.json()
+    
+    let string = data.split('/')
+    let json1 = JSON.parse(string[0].replaceAll("'",'"'))
+    let json2 = JSON.parse(string[1].replaceAll("'",'"'))
+    
+        for (let i = 0; i < categories.length; i++) {
+            amounts1[i] = json1[`${categories[i]}`]
+            amounts2[i] = json2[`${categories[i]}`]
+        }  
+        
+        year1 = json1['season']
+        year2 = json2['season']
+        team1 = json1['team']
+        team2 = json2['team']    
+}
+
+async function giveData() {
+    $.ajax({
+        url: url + '/postmethod',
+        type: 'POST',
+        data: JSON.stringify({
+            Team1: team1,
+            Team2: team2,
+            Season1: year1,
+            Season2: year2,
+            }),
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+        },
+        error: function(error) {
+            console.log(error)
+        }
+    });
 }
 
 function makeChart() {
+    const Polar = document.getElementById('mychart').getContext('2d')
+    
     const dummyData = {
         datasets: [{
             label: `${year1} ${team1}`,
@@ -107,22 +130,40 @@ function makeChart() {
         labels: categories,
     }
     
-    const Polar = document.getElementById('mychart').getContext('2d')
-    const PolarChart = new Chart (Polar, { 
-        type: 'radar', 
-        data: dummyData, 
-        options: {
-            scale: {
-                min: 0,
-                max: 32,
-                stepSize: 4,
-                
-            },
-        }
-    })
+    if (!chart) {
+        const PolarChart = new Chart (Polar, { 
+            type: 'radar', 
+            data: dummyData, 
+            options: {
+                scale: {
+                    min: 0,
+                    max: 32,
+                    stepSize: 4,
+                },
+            }
+        })
+        
+        chart = true
+    } else {
+        
+        const PolarChart = new Chart (Polar, { 
+            type: 'radar', 
+            data: dummyData, 
+            options: {
+                scale: {
+                    min: 0,
+                    max: 32,
+                    stepSize: 4,
+                },
+            }
+        })
+    }
+    
+    team1 = team2 = year1 = year2 = ''
 }
 
 generateTeams()
 generateYear()
 getdata.addEventListener('click', getData)
 chartdata.addEventListener('click', makeChart)
+givedata.addEventListener('click', giveData)
