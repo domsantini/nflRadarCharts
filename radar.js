@@ -35,6 +35,7 @@ function generateTeams() {
     for (let i = 0; i < teams.length; i++) {
         let div = document.createElement('div')
         div.classList = 'teamGrid'
+        div.id = `${teams[i]}Grid`
         div.style.height = `${height / 4}px`
         div.style.width = `${width / 8}px`
         
@@ -50,9 +51,12 @@ function generateTeams() {
             
             if (team1) {
                 team2 = e.target.id
+                e.target.parentElement.classList.add('clicked')
                 console.log(year1, year2, team1, team2)
             } else {
                 team1 = e.target.id
+                e.target.parentElement.classList.add('clicked')
+                
                 console.log(year1, year2, team1, team2)
             }
         })
@@ -83,8 +87,8 @@ async function getData() {
     let json2 = JSON.parse(string[1].replaceAll("'",'"'))
     
         for (let i = 0; i < categories.length; i++) {
-            amounts1[i] = json1[`${categories[i]}`]
-            amounts2[i] = json2[`${categories[i]}`]
+            amounts1[i] = 33 - json1[`${categories[i]}`]
+            amounts2[i] = 33 - json2[`${categories[i]}`]
         }  
         
         year1 = json1['season']
@@ -115,7 +119,7 @@ async function giveData() {
 }
 
 function makeChart() {
-    
+    // APEXCHARTS
     let options = {
         chart: {
             width: '100%',
@@ -139,8 +143,7 @@ function makeChart() {
                     return val.toFixed(0)
                 }
             },
-            reversed: true,
-            min: 1,
+            min: 0,
             max: 32,
             tickAmount: 8,
         }
@@ -149,9 +152,9 @@ function makeChart() {
     let chart = new ApexCharts(document.querySelector("#chart"), options);  
     chart.render();
     
-      
+    // CHARTJS
     
-    // const polar = document.getElementById('mychart').getContext('2d')
+    // const polar = document.getElementById('chart').getContext('2d');
     
     // const dummyData = {
     //     datasets: [{
@@ -168,36 +171,24 @@ function makeChart() {
     //     labels: categories,
     // }
     
-    // if (!chart) {
-    //     const PolarChart = new Chart (Polar, { 
-    //         type: 'radar', 
-    //         data: dummyData, 
-    //         options: {
-    //             scale: {
-    //                 min: 0,
-    //                 max: 32,
-    //                 stepSize: 4,
-    //             },
-    //         }
-    //     })
-        
-    //     chart = true
-    // } else {
-        
-    //     const PolarChart = new Chart (Polar, { 
-    //         type: 'radar', 
-    //         data: dummyData, 
-    //         options: {
-    //             scale: {
-    //                 min: 0,
-    //                 max: 32,
-    //                 stepSize: 4,
-    //             },
-    //         }
-    //     })
-    // }
+       
+    // const PolarChart = new Chart (polar, { 
+    //     type: 'radar', 
+    //     data: dummyData, 
+    //     options: {
+    //         scale: {
+    //             reverse: true,
+    //             // min: 0,
+    //             // max: 32,
+    //             stepSize: 4,
+    //             ticks: {
+    //                 beginAtZero: true
+    //             }
+    //         },
+    //     }
+    // })
     
-    // team1 = team2 = year1 = year2 = ''
+    team1 = team2 = year1 = year2 = ''
 }
 
 generateTeams()

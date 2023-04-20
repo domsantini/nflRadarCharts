@@ -50,11 +50,6 @@ def getData():
 @app.route("/")
 def home():
 
-    print(Team1)
-    print(Team2)
-    print(type(Season1))
-    print(type(Season2))
-
     dictionaries = get_dictionaries(Team1, int(Season1), Team2, int(Season2))
     first_team = dictionaries[0]
     second_team = dictionaries[1]
