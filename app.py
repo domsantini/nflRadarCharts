@@ -47,8 +47,8 @@ def getData():
     
     return jsonify(Season1=Season1, Season2=Season2, Team1=Team1, Team2=Team2)
 
-@app.route("/")
-def home():
+@app.route('/getmethod')
+def passData():
 
     dictionaries = get_dictionaries(Team1, int(Season1), Team2, int(Season2))
     first_team = dictionaries[0]
@@ -58,6 +58,11 @@ def home():
     print(second_team)
     
     return jsonify('{}/{}'.format(first_team, second_team))
+    
+@app.route("/")
+def home():
+    print('connected to flask')
+
 
 
 if __name__ == "__main__":

@@ -22,12 +22,14 @@ let team1 = ''
 let team2 = ''
 
 const categories = [
-        'Def Passing Yds Rank', 
-        'Def Rushing Yds Rank', 
-        'PA Rank', 
-        'PF Rank', 
-        'Passing Yds Rank', 
-        'Rushing Yds Rank']
+    'PF Rank', 
+    'Passing Yds Rank', 
+    'Def Rushing Yds Rank', 
+    'PA Rank', 
+    'Def Passing Yds Rank', 
+    'Rushing Yds Rank',
+]
+
 const amounts1 = []
 const amounts2 = []
 
@@ -56,7 +58,6 @@ function generateTeams() {
             } else {
                 team1 = e.target.id
                 e.target.parentElement.classList.add('clicked')
-                
                 console.log(year1, year2, team1, team2)
             }
         })
@@ -78,8 +79,35 @@ function generateYear() {
     })
 }
 
+async function giveData() {
+    console.log(year1, year2, team1, team2)
+    
+    $.ajax({
+        url: url + '/postmethod',
+        type: 'POST',
+        data: JSON.stringify({
+            Team1: team1,
+            Team2: team2,
+            Season1: year1,
+            Season2: year2,
+            }),
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        success: function (data) {
+            console.log(year1, year2, team1, team2)
+            console.log(data);
+        },
+        error: function(error) {
+            console.log(error)
+        }
+    })
+}
+
 async function getData() {
-    const response = await fetch(url)
+    
+    console.log(year1, year2, team1, team2)
+    
+    const response = await fetch(url + '/getmethod')
     const data = await response.json()
     
     let string = data.split('/')
@@ -95,30 +123,17 @@ async function getData() {
         year2 = json2['season']
         team1 = json1['team']
         team2 = json2['team']    
+    
+    console.log(year1, year2, team1, team2)
+    console.log(amounts1)
+    console.log(amounts2)
+    return [amounts1, amounts2]
 }
 
-async function giveData() {
-    $.ajax({
-        url: url + '/postmethod',
-        type: 'POST',
-        data: JSON.stringify({
-            Team1: team1,
-            Team2: team2,
-            Season1: year1,
-            Season2: year2,
-            }),
-        contentType: 'application/json; charset=utf-8',
-        dataType: 'json',
-        success: function (data) {
-            console.log(data);
-        },
-        error: function(error) {
-            console.log(error)
-        }
-    });
-}
-
-function makeChart() {
+async function makeChart() {
+    const [data1, data2] = await Promise.all([getData(), giveData()]);
+    console.log(data1)
+    console.log(data2)
     // APEXCHARTS
     let options = {
         chart: {
@@ -149,50 +164,17 @@ function makeChart() {
         }
     }
       
-    let chart = new ApexCharts(document.querySelector("#chart"), options);  
+    let chart = await new ApexCharts(document.querySelector("#chart"), options);  
     chart.render();
-    
-    // CHARTJS
-    
-    // const polar = document.getElementById('chart').getContext('2d');
-    
-    // const dummyData = {
-    //     datasets: [{
-    //         label: `${year1} ${team1}`,
-    //         borderColor: 'rgb(1, 206, 145)',
-    //         backgroundColor: 'rgba(1, 206, 145, 0.2)',
-    //         data: amounts1
-    //     }, {
-    //         label: `${year2} ${team2}`,
-    //         borderColor: 'rgb(156, 69, 161)',
-    //         backgroundColor: 'rgba(156, 69, 161, 0.2)',
-    //         data: amounts2
-    //     }], 
-    //     labels: categories,
-    // }
-    
-       
-    // const PolarChart = new Chart (polar, { 
-    //     type: 'radar', 
-    //     data: dummyData, 
-    //     options: {
-    //         scale: {
-    //             reverse: true,
-    //             // min: 0,
-    //             // max: 32,
-    //             stepSize: 4,
-    //             ticks: {
-    //                 beginAtZero: true
-    //             }
-    //         },
-    //     }
-    // })
     
     team1 = team2 = year1 = year2 = ''
 }
 
 generateTeams()
 generateYear()
-getdata.addEventListener('click', getData)
-chartdata.addEventListener('click', makeChart)
-givedata.addEventListener('click', giveData)
+
+chartdata.addEventListener('click', () => {
+    getData()
+    giveData()
+    makeChart()
+})

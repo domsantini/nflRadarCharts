@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <script src="radar.js" defer></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>     -->
+    
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -15,24 +15,20 @@
 <body>    
     <h1>NFL Radar Charts</h1>
     
-    <button id="givedata">Give Data</button>
-    <button id="getdata">Get Data</button>
-    <button id="chartdata">Chart Data</button>
-    
     <span id="test"></span>
     <div class="container">
         <div class="controlsCon">
             <div class="yearCon">
-                <input type="range" name="yearSlider" id="year1Slider" min="2002" max="2022">
-                <input type="range" name="yearSlider" id="year2Slider" min="2002" max="2022">
+                <input type="range" name="yearSlider" id="year1Slider" min="2002" max="2022" step="1" >
+                <input type="range" name="yearSlider" id="year2Slider" min="2002" max="2022" step="1">
             </div>
             <div class="teamCon">
                 
             </div>
+            <button id="chartdata">Chart Data</button>
         </div>
         <div class="chartCon">
             <div id="chart"></div>
-            <!-- <canvas id="chart"></canvas> -->
         </div>
     </div>
     <footer>
