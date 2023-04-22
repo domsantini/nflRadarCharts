@@ -36,7 +36,8 @@ def get_dictionaries(Team1, Season1, Team2, Season2):
           
           'Key Player': None,
           
-          'team_color': None, 	'team_color2': None,	'team_color3': None,	'team_color4': None
+          # 'team_color': None, 	'team_color2': None,	'team_color3': None,	'team_color4': None
+          'team_color': None, 	'team_color2': None
           }
 
   team_dict2 = {'team': Team2, 'season': Season2,
@@ -48,7 +49,8 @@ def get_dictionaries(Team1, Season1, Team2, Season2):
           
           'Key Player': None,
           
-          'team_color': None, 	'team_color2': None,	'team_color3': None,	'team_color4': None
+          # 'team_color': None, 	'team_color2': None,	'team_color3': None,	'team_color4': None
+          'team_color': None, 	'team_color2': None
           }
 
   # Update dictionary values with stats from relevant dataframes

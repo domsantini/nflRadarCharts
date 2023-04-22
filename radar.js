@@ -7,18 +7,9 @@ const teams = ['ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE',
 const height = 250
 const width = 500
 const teamCon = document.querySelector('.teamCon')
-
-const year1Slider = document.querySelector('#year1Slider')
-const year2Slider = document.querySelector('#year2Slider')
-
 const season1Selector = document.querySelector('#season1Selector')
 const season2Selector = document.querySelector('#season2Selector')
-
-const getdata = document.querySelector('#getdata')
 const chartdata = document.querySelector('#chartdata')
-const givedata = document.querySelector('#givedata')
-const span = document.querySelector('#test')
-
 
 const url = 'http://127.0.0.1:5000'
 let year1 = ''
@@ -37,6 +28,8 @@ const categories = [
 
 const amounts1 = []
 const amounts2 = []
+let isChart = false
+
 
 function generateTeams() {
     let fragment = document.createDocumentFragment()
@@ -86,10 +79,8 @@ function generateYear() {
         fragment.appendChild(option)
         
         for (let j = 2022; j > 2001; j--) {
-            let option = document.createElement('option')
-            console.log(option)
+            let option = document.createElement('option')            
             option.value = j
-            console.log(option)
             option.text = `${j}`
             
             fragment.appendChild(option)
@@ -134,7 +125,6 @@ async function giveData() {
     return [data]
 }
 
-
 async function getData() {
     
     console.log(year1, year2, team1, team2)
@@ -154,7 +144,7 @@ async function getData() {
         year1 = json1['season']
         year2 = json2['season']
         team1 = json1['team']
-        team2 = json2['team']    
+        team2 = json2['team']
     
     console.log(year1, year2, team1, team2)
     console.log(amounts1)
@@ -168,7 +158,7 @@ async function makeChart() {
     const [data1, data2] = await Promise.all([await giveData(), getData()]);
     console.log(data1)
     console.log(data2)
-    // APEXCHARTS
+    
     let options = {
         chart: {
             width: '100%',
@@ -197,9 +187,30 @@ async function makeChart() {
             tickAmount: 8,
         }
     }
-      
-    let chart = await new ApexCharts(document.querySelector("#chart"), options);  
-    chart.render();
+    
+    if (isChart) {
+        chart.updateOptions({
+            series: [
+                {
+                  name: `${year1} ${team1}`,
+                  data: amounts1
+                },
+                {
+                  name: `${year2} ${team2}`,
+                  data: amounts2
+                }
+            ]
+        }, true);
+        
+        // chart.render();
+        isChart = true 
+    } else {
+        let chart = await new ApexCharts(document.querySelector("#chart"), options);  
+        chart.render();
+        isChart = true    
+    }
+    
+    
     
     team1 = team2 = year1 = year2 = ''
 }
