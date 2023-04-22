@@ -36,6 +36,7 @@ def get_dictionaries(Team1, Season1, Team2, Season2):
           
           'Key Player': None,
           
+          # Removed team_color3 and team_color4 because they were throwing an error for NYJ
           # 'team_color': None, 	'team_color2': None,	'team_color3': None,	'team_color4': None
           'team_color': None, 	'team_color2': None
           }

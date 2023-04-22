@@ -9,7 +9,7 @@ const width = 500
 const teamCon = document.querySelector('.teamCon')
 const season1Selector = document.querySelector('#season1Selector')
 const season2Selector = document.querySelector('#season2Selector')
-const chartdata = document.querySelector('#chartdata')
+const chartData = document.querySelector('#chartdata')
 
 const url = 'http://127.0.0.1:5000'
 let year1 = ''
@@ -28,7 +28,7 @@ const categories = [
 
 const amounts1 = []
 const amounts2 = []
-let isChart = false
+let chart = null
 
 
 function generateTeams() {
@@ -188,29 +188,15 @@ async function makeChart() {
         }
     }
     
-    if (isChart) {
-        chart.updateOptions({
-            series: [
-                {
-                  name: `${year1} ${team1}`,
-                  data: amounts1
-                },
-                {
-                  name: `${year2} ${team2}`,
-                  data: amounts2
-                }
-            ]
-        }, true);
-        
-        // chart.render();
-        isChart = true 
+    if (chart) {
+        chart.updateOptions(options)
     } else {
-        let chart = await new ApexCharts(document.querySelector("#chart"), options);  
-        chart.render();
-        isChart = true    
+        chart = await new ApexCharts(document.querySelector("#chart"), options);  
+        chart.render();    
     }
     
-    
+    // chart = await new ApexCharts(document.querySelector("#chart"), options);  
+    // chart.render();
     
     team1 = team2 = year1 = year2 = ''
 }
