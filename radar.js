@@ -3,13 +3,17 @@ const teams = ['ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE',
             'LAC', 'LAR', 'LV', 'MIA', 'MIN', 'NE', 'NO', 'NYG', 
             'NYJ', 'PHI', 'PIT', 'SEA', 'SF', 'TB', 'TEN', 'WAS'
 ]
-            
+
 const height = 250
 const width = 500
-let fragment = document.createDocumentFragment()
 const teamCon = document.querySelector('.teamCon')
+
 const year1Slider = document.querySelector('#year1Slider')
 const year2Slider = document.querySelector('#year2Slider')
+
+const season1Selector = document.querySelector('#season1Selector')
+const season2Selector = document.querySelector('#season2Selector')
+
 const getdata = document.querySelector('#getdata')
 const chartdata = document.querySelector('#chartdata')
 const givedata = document.querySelector('#givedata')
@@ -35,7 +39,10 @@ const amounts1 = []
 const amounts2 = []
 
 function generateTeams() {
+    let fragment = document.createDocumentFragment()
+    
     for (let i = 0; i < teams.length; i++) {
+        
         let div = document.createElement('div')
         div.classList = 'teamGrid'
         div.id = `${teams[i]}Grid`
@@ -70,11 +77,35 @@ function generateTeams() {
 }
 
 function generateYear() {
-    year1Slider.addEventListener('change', e => {
+    let fragment = document.createDocumentFragment()
+    
+    for (let i = 1; i < 3; i++) {
+        let option = document.createElement('option')
+        option.text = `Team ${i} Season`
+        option.selected = true;
+        fragment.appendChild(option)
+        
+        for (let j = 2022; j > 2001; j--) {
+            let option = document.createElement('option')
+            console.log(option)
+            option.value = j
+            console.log(option)
+            option.text = `${j}`
+            
+            fragment.appendChild(option)
+        }
+        if (i == 1){
+            season1Selector.appendChild(fragment)
+        } else {
+            season2Selector.appendChild(fragment)
+        }
+    }
+    
+    season1Selector.addEventListener('change', e => {
         year1 = e.target.value
         console.log(year1, year2, team1, team2)
     })
-    year2Slider.addEventListener('change', e => {
+    season2Selector.addEventListener('change', e => {
         year2 = e.target.value
         console.log(year1, year2, team1, team2)
     })

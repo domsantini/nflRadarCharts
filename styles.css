@@ -51,6 +51,11 @@ h1 {
     width: 15px;
     border: 2px solid red;
 }
+.seasonSelect {
+    width: 100%;
+}
+
+
 .teamCon {
     display: flex;
     flex-wrap: wrap;
