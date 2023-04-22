@@ -1,7 +1,8 @@
 const teams = ['ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE', 
             'DAL', 'DEN', 'DET', 'GB', 'HOU', 'IND', 'JAX', 'KC', 
             'LAC', 'LAR', 'LV', 'MIA', 'MIN', 'NE', 'NO', 'NYG', 
-            'NYJ', 'PHI', 'PIT', 'SEA', 'SF', 'TB', 'TEN', 'WAS'];
+            'NYJ', 'PHI', 'PIT', 'SEA', 'SF', 'TB', 'TEN', 'WAS'
+]
             
 const height = 250
 const width = 500
@@ -82,26 +83,26 @@ function generateYear() {
 async function giveData() {
     console.log(year1, year2, team1, team2)
     
-    $.ajax({
-        url: url + '/postmethod',
-        type: 'POST',
-        data: JSON.stringify({
+    const response = await fetch(url + '/postmethod', {
+        method: 'POST',
+        body: JSON.stringify({
             Team1: team1,
             Team2: team2,
             Season1: year1,
             Season2: year2,
-            }),
-        contentType: 'application/json; charset=utf-8',
-        dataType: 'json',
-        success: function (data) {
-            console.log(year1, year2, team1, team2)
-            console.log(data);
-        },
-        error: function(error) {
-            console.log(error)
+        }),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8'
         }
     })
+    
+    const data = await response.json()
+    
+    console.log(year1, year2, team1, team2)
+    console.log(data)
+    return [data]
 }
+
 
 async function getData() {
     
@@ -127,11 +128,13 @@ async function getData() {
     console.log(year1, year2, team1, team2)
     console.log(amounts1)
     console.log(amounts2)
+    console.log(json1.team_color)
+    console.log(json2['Key Player'])
     return [amounts1, amounts2]
 }
 
 async function makeChart() {
-    const [data1, data2] = await Promise.all([getData(), giveData()]);
+    const [data1, data2] = await Promise.all([await giveData(), getData()]);
     console.log(data1)
     console.log(data2)
     // APEXCHARTS
@@ -174,7 +177,7 @@ generateTeams()
 generateYear()
 
 chartdata.addEventListener('click', () => {
-    getData()
-    giveData()
+    
     makeChart()
+    
 })
