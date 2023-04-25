@@ -39,8 +39,8 @@ function generateTeams() {
         let div = document.createElement('div')
         div.classList = 'teamGrid'
         div.id = `${teams[i]}Grid`
-        div.style.height = `${height / 4}px`
-        div.style.width = `${width / 8}px`
+        // div.style.height = `${height / 4}px`
+        // div.style.width = `${width / 8}px`
         
         let img = document.createElement('img')
         img.src = `logos/${teams[i]}.png`

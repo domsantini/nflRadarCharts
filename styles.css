@@ -1,19 +1,20 @@
 body {
-    min-height: 95vh;
-    background-color: honeydew;
+    font-family: 'Roboto Condensed', sans-serif;
+    
+    height: calc(100vh - 50px);
+    margin: 50px 0 0 0;
+    padding: 0;
+    background-image: linear-gradient(lightgray, lightblue);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
-h1 {
-    text-align: center;
-    margin: 50px auto;
 }
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 75px;
+    padding: 0 50px;
 }
 
 /* Control box styling */
@@ -23,43 +24,52 @@ h1 {
     flex-direction: column;
     align-items: center;
     border: 3px solid gray;
+    border-radius: 3px;
     max-height: 500px;
     width: 500px;
     padding: 10px;
+    
+    background-color: whitesmoke;
+    
 }
-.yearCon, .teamCon {
+/* .yearCon, .teamCon {
     border: 2px solid red;
-}
+} */
 .yearCon {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100px;
     width: 100%;
-    margin-bottom: 50px;
+    margin-bottom: 25px;
     gap: 10px;
-    
 }
-
 .seasonSelect {
+    font-family: 'Roboto Condensed', sans-serif;
+    height: 40px;
     width: 100%;
 }
-
-
 .teamCon {
-    display: flex;
-    flex-wrap: wrap;
-    height: 250px;
-    width: 100%;
+    display: grid;
+    grid-template: repeat(4, 1fr) / repeat(8, 1fr);
+    gap: 0;
+    min-height: 100%;
+    max-width: 100%;
+    
+    border: 2px solid darkgrey;
+    border-radius: 2px;
 }
 .teamGrid {
     box-sizing: border-box;
     border-spacing: 0;
     border: 1px solid lightgray;
+    padding: 1px;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-shrink: 1;
+    
+    min-height: 100%;
+    max-width: 100%;
 }
 .teamGrid img {
     display: flex;
@@ -67,6 +77,8 @@ h1 {
     padding: 1px;
     max-height: 100%;
     max-width: 100%;
+    min-height: 0;
+    min-width: 0;;
 }
 .teamGrid.clicked {
     box-sizing: border-box;
@@ -77,13 +89,20 @@ h1 {
     justify-content: center;
     align-items: center;
 }
+button {
+    font-family: 'Roboto Condensed', sans-serif;
+    padding: 5px 10px;
+}
 /* Chart box styling */
 
 .chartCon {
     border: 3px solid gray;
+    border-radius: 3px;
+    background-color: whitesmoke;
     padding: 10px;
     height: 600px;
     width: 600px;
+    
 }
 canvas {
     max-width: 100%;

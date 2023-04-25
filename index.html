@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital@1&display=swap" rel="stylesheet">
     <script src="radar.js" defer></script>
     
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -16,12 +19,12 @@
     
 </head>
 <body>    
-    <h1>NFL Radar Charts</h1>
-    
-    <span id="test"></span>
     <div class="container">
         <div class="controlsCon">
+            
+            <h3>Pick your seasons: </h3>
             <div class="yearCon">
+                <!-- <p>Pick your seasons:</p> -->
                 <select id='season1Selector' name='year' class="seasonSelect">
                     
                 </select>
@@ -29,10 +32,14 @@
                     
                 </select>
             </div>
+            
+            <h3>Pick your teams:</h3>
             <div class="teamCon">
+                <!-- <p>Pick your teams: </p> -->
                 
             </div>
-            <button id="chartdata">Chart Data</button>
+            <br>
+            <button id="chartdata">Compare!</button>
         </div>
         <div class="chartCon">
             <div id="chart"></div>
