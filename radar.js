@@ -16,6 +16,10 @@ let year1 = ''
 let year2 = ''
 let team1 = ''
 let team2 = ''
+let color1Main = null;
+let color1Secondary = null;
+let color2Main = null;
+let color2Secondary = null;
 
 const categories = [
     'PF Rank', 
@@ -127,7 +131,7 @@ async function giveData() {
 
 async function getData() {
     
-    console.log(year1, year2, team1, team2)
+    // console.log(year1, year2, team1, team2)
     
     const response = await fetch(url + '/getmethod')
     const data = await response.json()
@@ -145,24 +149,29 @@ async function getData() {
         year2 = json2['season']
         team1 = json1['team']
         team2 = json2['team']
+        color1Main = json1['team_color']
+        color1Secondary = json1['team_color2']
+        color2Main = json2['team_color']
+        color2Secondary = json2['team_color2']
     
-    console.log(year1, year2, team1, team2)
-    console.log(amounts1)
-    console.log(amounts2)
-    console.log(json1.team_color)
-    console.log(json2['Key Player'])
+    // console.log(year1, year2, team1, team2)
+    // console.log(amounts1)
+    // console.log(amounts2)
+    // console.log(json1.team_color)
+    // console.log(json2['Key Player'])
     return [amounts1, amounts2]
 }
 
 async function makeChart() {
     const [data1, data2] = await Promise.all([await giveData(), getData()]);
-    console.log(data1)
-    console.log(data2)
+    // console.log(data1)
+    // console.log(data2)
     
     let options = {
         chart: {
             width: '100%',
             height: '100%',
+            fontFamily: 'Roboto Condensed, sans-serif',
             type: 'radar',
         },
         series: [
@@ -176,16 +185,57 @@ async function makeChart() {
           }
         ],
         labels: categories,
-        yaxis: {
+        stroke: {
+          colors: [color1Main, color2Main],  
+        },
+        markers: {
+            colors: [color1Main, color2Main]
+        },
+        fill: {
+            opacity: 0.1,
+            colors: [color1Secondary, color2Secondary],
+        },
+        xaxis: {
             labels: {
-                formatter: function (val) {
-                    return val.toFixed(0)
-                }
-            },
+                style: {
+                    colors: ['#000000','#000000','#000000','#000000','#000000','#000000'],
+                },
+            }
+        },
+        yaxis: {
+            show: false,
             min: 0,
             max: 32,
             tickAmount: 8,
-        }
+        },
+        tooltip: {
+            enabled: true,
+            y: {
+                formatter: function (val) {
+                    let num = 33 - val
+                    
+                    if ([1, 21, 31].includes(num)) {
+                        return num + 'st'
+                    } else if ([2, 22, 32].includes(num)) {
+                        return num + 'nd' 
+                    } else if ([3, 23].includes(num)) {
+                        return num + 'rd'
+                    } else {
+                        return num + 'th'
+                    }
+                    
+                }
+            }
+        },
+        legend: {
+            markers: {
+                strokeWidth: 2,
+                strokeColor: [color1Main, color2Main],
+                fillColors: [color1Secondary, color2Secondary],
+                // fillColors: [color1Main, color2Main],
+                useSeriesColors: false
+            },
+        },
     }
     
     if (chart) {
@@ -198,7 +248,7 @@ async function makeChart() {
     // chart = await new ApexCharts(document.querySelector("#chart"), options);  
     // chart.render();
     
-    team1 = team2 = year1 = year2 = ''
+    team1 = team2 = ''
 }
 
 generateTeams()
