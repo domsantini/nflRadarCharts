@@ -4,43 +4,51 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/logos/aFootball.png">
+    <title>NFL Radar Charts</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital@1&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital@1&display=swap" rel="stylesheet">
     <script src="radar.js" defer></script>
-    
+    <script src="popup.js" defer></script> 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    <title>NFL Radar Charts</title>
-    <link rel="icon" href="/logos/aFootball.png">
-    
 </head>
 <body>    
     <div class="container">
         <div class="controlsCon">
-            
             <h3>Pick your seasons:</h3>
             <div class="yearCon">
-                <!-- <p>Pick your seasons:</p> -->
                 <select id='season1Selector' name='year' class="seasonSelect">
-                    
+                
                 </select>
                 <select id='season2Selector' name='year' class="seasonSelect"> 
-                    
+                
                 </select>
             </div>
             
             <h3>Pick your teams:</h3>
             <div class="teamCon">
-                <!-- <p>Pick your teams: </p> -->
-                
+            
             </div>
             <br>
             <button id="chartdata">Compare!</button>
-            <button id="statdata" hidden>Take a look at the numbers</button>
+            <button data-modal-target="#modal">Take a look at the numbers!</button>
+            <div class="modal" id="modal">
+                <div class="modal-header">
+                    <div class="title">The numbers</div>
+                    <button data-close-button class="close-button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consequatur ut modi sapiente magnam a consectetur alias aliquam illum velit fugit mollitia aperiam placeat, adipisci deleniti iusto recusandae doloremque assumenda dicta molestiae. Magni quos dolore necessitatibus molestias consectetur, ut optio doloribus. Accusantium sapiente cumque odio nam eligendi tempore iusto voluptates harum.
+                    
+                </div>
+            </div>
+            <div id="overlay"></div>
+            
         </div>
         <div class="chartCon">
             <div id="chart"></div>

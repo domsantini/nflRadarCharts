@@ -4,11 +4,6 @@ const teams = ['ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE',
             'NYJ', 'PHI', 'PIT', 'SEA', 'SF', 'TB', 'TEN', 'WAS'
 ]
 
-const height = 250
-const width = 500
-const teamCon = document.querySelector('.teamCon')
-const season1Selector = document.querySelector('#season1Selector')
-const season2Selector = document.querySelector('#season2Selector')
 const chartData = document.querySelector('#chartdata')
 
 const url = 'http://127.0.0.1:5000'
@@ -16,10 +11,11 @@ let year1 = ''
 let year2 = ''
 let team1 = ''
 let team2 = ''
-let color1Main = null;
-let color1Secondary = null;
-let color2Main = null;
-let color2Secondary = null;
+
+let color1Main = null
+let color1Secondary = null
+let color2Main = null
+let color2Secondary = null
 
 const categories = [
     'PF Rank', 
@@ -36,19 +32,19 @@ let chart = null
 
 
 function generateTeams() {
+    
+    const teamCon = document.querySelector('.teamCon')
     let fragment = document.createDocumentFragment()
+    let teamCount = 0
     
     for (let i = 0; i < teams.length; i++) {
         
         let div = document.createElement('div')
         div.classList = 'teamGrid'
         div.id = `${teams[i]}Grid`
-        // div.style.height = `${height / 4}px`
-        // div.style.width = `${width / 8}px`
         
         let img = document.createElement('img')
         img.src = `logos/${teams[i]}.png`
-        
         img.classList = 'teamGrid'
         img.id = teams[i]
         
@@ -56,33 +52,54 @@ function generateTeams() {
         
         img.addEventListener('click', e => {
             
-            if (team1) {
-                team2 = e.target.id
-                e.target.parentElement.classList.add('clicked')
-                console.log(year1, year2, team1, team2)
-            } else {
-                team1 = e.target.id
-                e.target.parentElement.classList.add('clicked')
-                console.log(year1, year2, team1, team2)
+            if (team1 && team2) {
+            
+                if (e.target.parentElement.classList.contains('clickedT1')) {
+                    team1 = null
+                    e.target.parentElement.classList.remove('clickedT1')
+                    teamCount--
+                } else if (e.target.parentElement.classList.contains('clickedT2')) {
+                    team2 = null
+                    e.target.parentElement.classList.remove('clickedT2')
+                    teamCount--
+                }
+                
+                return 
+            } 
+            
+            if (teamCount < 2) {
+                
+                if (team1) {
+                    team2 = e.target.id
+                    e.target.parentElement.classList.add('clickedT2')
+                    teamCount++
+                } else {
+                    team1 = e.target.id
+                    e.target.parentElement.classList.add('clickedT1')
+                    teamCount++
+                }
             }
+            // console.log(`T1: ${team1}, T2: ${team2}, TC: ${teamCount}`)
         })
-        
         fragment.appendChild(div)
-        
     }
     teamCon.appendChild(fragment)
 }
 
 function generateYear() {
+    const season1Selector = document.querySelector('#season1Selector')
+    const season2Selector = document.querySelector('#season2Selector')
     let fragment = document.createDocumentFragment()
     
     for (let i = 1; i < 3; i++) {
+        
         let option = document.createElement('option')
         option.text = `Team ${i} Season`
         option.selected = true;
         fragment.appendChild(option)
         
         for (let j = 2022; j > 2001; j--) {
+            
             let option = document.createElement('option')            
             option.value = j
             option.text = `${j}`
@@ -98,16 +115,13 @@ function generateYear() {
     
     season1Selector.addEventListener('change', e => {
         year1 = e.target.value
-        console.log(year1, year2, team1, team2)
     })
     season2Selector.addEventListener('change', e => {
         year2 = e.target.value
-        console.log(year1, year2, team1, team2)
     })
 }
 
 async function giveData() {
-    console.log(year1, year2, team1, team2)
     
     const response = await fetch(url + '/postmethod', {
         method: 'POST',
@@ -123,15 +137,11 @@ async function giveData() {
     })
     
     const data = await response.json()
-    
-    console.log(year1, year2, team1, team2)
-    console.log(data)
+
     return [data]
 }
 
 async function getData() {
-    
-    // console.log(year1, year2, team1, team2)
     
     const response = await fetch(url + '/getmethod')
     const data = await response.json()
@@ -154,25 +164,22 @@ async function getData() {
         color2Main = json2['team_color']
         color2Secondary = json2['team_color2']
     
-    // console.log(year1, year2, team1, team2)
-    // console.log(amounts1)
-    // console.log(amounts2)
-    // console.log(json1.team_color)
-    // console.log(json2['Key Player'])
+    
     return [amounts1, amounts2]
 }
 
 async function makeChart() {
     const [data1, data2] = await Promise.all([await giveData(), getData()]);
-    // console.log(data1)
-    // console.log(data2)
-    
+        
     let options = {
         chart: {
             width: '100%',
             height: '100%',
             fontFamily: 'Roboto Condensed, sans-serif',
             type: 'radar',
+            toolbar: {
+            //   offsetX: -20,  
+            },
         },
         series: [
           {
@@ -223,7 +230,6 @@ async function makeChart() {
                     } else {
                         return num + 'th'
                     }
-                    
                 }
             }
         },
@@ -232,7 +238,6 @@ async function makeChart() {
                 strokeWidth: 2,
                 strokeColor: [color1Main, color2Main],
                 fillColors: [color1Secondary, color2Secondary],
-                // fillColors: [color1Main, color2Main],
                 useSeriesColors: false
             },
         },
@@ -244,11 +249,7 @@ async function makeChart() {
         chart = await new ApexCharts(document.querySelector("#chart"), options);  
         chart.render();    
     }
-    
-    // chart = await new ApexCharts(document.querySelector("#chart"), options);  
-    // chart.render();
-    
-    team1 = team2 = ''
+
 }
 
 generateTeams()
@@ -259,3 +260,4 @@ chartdata.addEventListener('click', () => {
     makeChart()
     
 })
+

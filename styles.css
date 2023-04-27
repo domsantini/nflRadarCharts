@@ -33,7 +33,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100px;
     width: 100%;
     margin-bottom: 25px;
     gap: 10px;
@@ -70,16 +69,26 @@ body {
     max-height: 100%;
     max-width: 100%;
     min-height: 0;
-    min-width: 0;;
+    min-width: 0;
 }
-.teamGrid.clicked {
+.teamGrid.clickedT1,
+.teamGrid.clickedT2 {
     box-sizing: border-box;
     border-spacing: 0;
-    border: 1px solid lightblue;
-    background-color: lightblue;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.teamGrid.clickedT1{
+    border: 1px solid lightblue;
+    background-color: lightblue;
+}
+.teamGrid.clickedT2 {
+    border: 1px solid lightgray;
+    background-color: lightgray;
+}
+.clickedT1.clickedT2 {
+    background: linear-gradient(to bottom right, lightgray, lightblue)
 }
 button {
     font-family: 'Roboto Condensed', sans-serif;
@@ -111,4 +120,91 @@ footer {
 footer span {
     font-size: larger;
     font-weight:bold;
+}
+
+/* Stat pop-up styling */
+
+table {
+    border-collapse: collapse;
+}
+th{
+    padding: 1px 5px;
+}
+td {
+    text-align: center;
+    padding: 1px 5px;
+}
+.top {
+    border-bottom: 1px solid black;
+}
+.middle {
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}
+
+/* Modal styling */
+
+/* *, *::after, *::before {
+    box-sizing: border-box;
+} */
+  
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: 200ms ease-in-out;
+    border: 3px solid grey;
+    border-radius: 2px;
+    z-index: 10;
+    background-color: whitesmoke;
+    width: 600px;
+    max-width: 80%;
+}
+  
+.modal.active {
+    transform: translate(-50%, -50%) scale(1);
+}
+  
+.modal-header {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid grey;
+}
+  
+.modal-header .title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+  
+.modal-header .close-button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+  
+.modal-body {
+    padding: 10px 15px;
+}
+  
+#overlay {
+    position: fixed;
+    opacity: 0;
+    transition: 200ms ease-in-out;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, .5);
+    pointer-events: none;
+}
+  
+#overlay.active {
+    opacity: 1;
+    pointer-events: all;
 }
