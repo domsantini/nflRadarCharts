@@ -117,7 +117,8 @@ footer {
     margin: 25px auto;
     
 }
-footer span {
+footer > span {
+    color: black;
     font-size: larger;
     font-weight:bold;
 }
@@ -144,9 +145,9 @@ td {
 
 /* Modal styling */
 
-/* *, *::after, *::before {
+*, *::after, *::before {
     box-sizing: border-box;
-} */
+}
   
 .modal {
     position: fixed;
@@ -207,4 +208,66 @@ td {
 #overlay.active {
     opacity: 1;
     pointer-events: all;
+}
+
+/* Tooltip styling */
+h3 > span {
+    color: red;
+}
+
+#tt1,
+#tt2 {
+    position: relative;
+}
+#tt1::before,
+#tt1::after,
+#tt2::before,
+#tt2::after {
+    --scale: 0;
+    --tooltips-color: lightblue;
+    --arrow-size: 10px;
+    
+    position: absolute;
+    top: -0.25rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(var(--translate-y, 0)) scale(var(--scale));
+    transition: 200ms transform;
+    transform-origin: bottom center;
+}
+#tt1::before,
+#tt2::before {
+    --translate-y: calc(-100% - var(--arrow-size));
+    
+    /* content: attr(data-tooltip1); */
+    color: black;
+    background: var(--tooltips-color);
+    font-size: 15px;
+    text-indent: 30px;
+    padding: 0.5rem;
+    width: 350px;
+    height: auto;
+    /* border: 2px solid grey; */
+    border-radius: 2px;
+  
+}  
+#tt1::before {
+    content: attr(data-tooltip1);
+}
+#tt2::before {
+    content: attr(data-tooltip2);
+}
+
+#tt1:hover::before,
+#tt1:hover::after,
+#tt2:hover::before,
+#tt2:hover::after {
+    --scale: 1;
+}
+#tt1::after,
+#tt2::after {
+    --translate-y: calc(-1 * var(--arrow-size));
+    content: '';
+    border: var(--arrow-size) solid transparent;
+    border-top-color: var(--tooltips-color);
+    transform-origin: top center;
 }
