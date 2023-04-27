@@ -50,7 +50,7 @@ function generateTeams() {
         
         div.appendChild(img)
         
-        img.addEventListener('click', e => {
+        div.addEventListener('click', e => {
             
             if (team1 && team2) {
             
@@ -63,7 +63,7 @@ function generateTeams() {
                     e.target.parentElement.classList.remove('clickedT2')
                     teamCount--
                 }
-                
+
                 return 
             } 
             
