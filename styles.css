@@ -245,8 +245,9 @@ h3 > span {
     /* content: attr(data-tooltip1); */
     color: black;
     background: var(--tooltips-color);
-    font-size: 15px;
-    text-indent: 30px;
+    font-size: 13px;
+    text-indent: 20px;
+    font-style: italic;
     padding: 0.5rem;
     width: 350px;
     height: auto;

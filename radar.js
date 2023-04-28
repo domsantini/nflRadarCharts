@@ -36,6 +36,7 @@ function generateTeams() {
     const teamCon = document.querySelector('.teamCon')
     let fragment = document.createDocumentFragment()
     let teamCount = 0
+    let prevTeam = null
     
     for (let i = 0; i < teams.length; i++) {
         
@@ -55,15 +56,35 @@ function generateTeams() {
             if (team1 && team2) {
             
                 if (e.target.parentElement.classList.contains('clickedT1')) {
-                    team1 = null
-                    e.target.parentElement.classList.remove('clickedT1')
-                    teamCount--
+                    let prevTeamDiv = document.getElementById(`${team2}`)
+                    prevTeamDiv.parentElement.classList.remove('clickedT2')
+                    team2 = e.target.id
+                    e.target.parentElement.classList.add('clickedT2')
+                                        
                 } else if (e.target.parentElement.classList.contains('clickedT2')) {
-                    team2 = null
-                    e.target.parentElement.classList.remove('clickedT2')
-                    teamCount--
+                    let prevTeamDiv = document.getElementById(`${team1}`)
+                    prevTeamDiv.parentElement.classList.remove('clickedT1')
+                    team1 = e.target.id
+                    e.target.parentElement.classList.add('clickedT1')
+                    
+                } else {
+                    if (prevTeam === 'team1') {
+                        let prevTeamDiv = document.getElementById(`${team2}`)
+                        prevTeamDiv.parentElement.classList.remove('clickedT2')
+                        team2 = e.target.id
+                        e.target.parentElement.classList.add('clickedT2')
+                        prevTeam = 'team2'
+                        console.log(prevTeam)
+                    } else {
+                        let prevTeamDiv = document.getElementById(`${team1}`)
+                        prevTeamDiv.parentElement.classList.remove('clickedT1')
+                        team1 = e.target.id
+                        e.target.parentElement.classList.add('clickedT1')
+                        prevTeam = 'team1'
+                        console.log(prevTeam)
+                    }
                 }
-
+                
                 return 
             } 
             
@@ -73,10 +94,14 @@ function generateTeams() {
                     team2 = e.target.id
                     e.target.parentElement.classList.add('clickedT2')
                     teamCount++
+                    prevTeam = 'team2'
+                    console.log(prevTeam)
                 } else {
                     team1 = e.target.id
                     e.target.parentElement.classList.add('clickedT1')
                     teamCount++
+                    prevTeam = 'team1'
+                    console.log(prevTeam)
                 }
             }
             // console.log(`T1: ${team1}, T2: ${team2}, TC: ${teamCount}`)

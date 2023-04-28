@@ -1,5 +1,4 @@
-import json
-from helper import get_dictionaries
+from helper import get_dictionaries, load_data
 from flask_cors import CORS
 from flask import Flask, jsonify, request, session
 
@@ -18,6 +17,8 @@ Season1 = ''
 Team2 = ''
 Season2 = ''
 
+# LOAD DATA IN 
+dataframes = load_data()
 
 @app.route("/")
 def home():
@@ -55,7 +56,8 @@ def passData():
 
     print(f'LINE 59: {Team1}, {Team2}, {Season1}, {Season2}')
 
-    dictionaries = get_dictionaries(Team1, int(Season1), Team2, int(Season2))
+    # dictionaries = get_dictionaries(Team1, int(Season1), Team2, int(Season2))
+    dictionaries = get_dictionaries(dataframes, Team1, int(Season1), Team2, int(Season2))
     first_team = dictionaries[0]
     second_team = dictionaries[1]
 
