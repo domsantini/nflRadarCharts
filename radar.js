@@ -273,8 +273,8 @@ async function makeChart() {
     } else {
         chart = await new ApexCharts(document.querySelector("#chart"), options);  
         chart.render();    
-    }
-
+    } 
+    
 }
 
 generateTeams()
@@ -283,6 +283,8 @@ generateYear()
 chartdata.addEventListener('click', () => {
     
     makeChart()
+    const openModalButtons = document.querySelector('[data-modal-target]')
+    openModalButtons.removeAttribute('hidden')
+    chartData.setAttribute('hidden', true)
     
 })
-
