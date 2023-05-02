@@ -152,7 +152,6 @@ td {
 *, *::after, *::before {
     box-sizing: border-box;
 }
-  
 .modal {
     position: fixed;
     top: 50%;
@@ -166,11 +165,9 @@ td {
     width: 600px;
     max-width: 80%;
 }
-  
 .modal.active {
     transform: translate(-50%, -50%) scale(1);
 }
-  
 .modal-header {
     padding: 10px 15px;
     display: flex;
@@ -178,12 +175,10 @@ td {
     align-items: center;
     border-bottom: 1px solid grey;
 }
-  
 .modal-header .title {
     font-size: 1.25rem;
     font-weight: bold;
 }
-  
 .modal-header .close-button {
     cursor: pointer;
     border: none;
@@ -191,12 +186,12 @@ td {
     background: none;
     font-size: 1.25rem;
     font-weight: bold;
-}
-  
+} 
 .modal-body {
     padding: 10px 15px;
+    display: flex;
+    justify-content: center;
 }
-  
 #overlay {
     position: fixed;
     opacity: 0;
@@ -207,18 +202,17 @@ td {
     bottom: 0;
     background-color: rgba(0, 0, 0, .5);
     pointer-events: none;
-}
-  
+}  
 #overlay.active {
     opacity: 1;
     pointer-events: all;
 }
 
 /* Tooltip styling */
+
 h3 > span {
     color: red;
 }
-
 #tt1,
 #tt2 {
     position: relative;
@@ -242,16 +236,15 @@ h3 > span {
 #tt2::before {
     --translate-y: calc(-100% - var(--arrow-size));
     
-    /* content: attr(data-tooltip1); */
     color: black;
     background: var(--tooltips-color);
     font-size: 13px;
     text-indent: 20px;
     font-style: italic;
+    line-height: 1.1rem;
     padding: 0.5rem;
     width: 350px;
     height: auto;
-    /* border: 2px solid grey; */
     border-radius: 2px;
   
 }  
@@ -261,7 +254,6 @@ h3 > span {
 #tt2::before {
     content: attr(data-tooltip2);
 }
-
 #tt1:hover::before,
 #tt1:hover::after,
 #tt2:hover::before,
@@ -275,4 +267,23 @@ h3 > span {
     border: var(--arrow-size) solid transparent;
     border-top-color: var(--tooltips-color);
     transform-origin: top center;
+}
+
+/* Table styling */
+table {
+    border-collapse: collapse;
+}
+th{
+    padding: 1px 5px;
+}
+td {
+    text-align: center;
+    padding: 1px 5px;
+}
+.top {
+    border-bottom: 1px solid black;
+}
+.middle {
+    border-right: 1px solid black;
+    border-left: 1px solid black;
 }

@@ -1,37 +1,21 @@
-const teams = ['ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE', 
-            'DAL', 'DEN', 'DET', 'GB', 'HOU', 'IND', 'JAX', 'KC', 
-            'LAC', 'LAR', 'LV', 'MIA', 'MIN', 'NE', 'NO', 'NYG', 
-            'NYJ', 'PHI', 'PIT', 'SEA', 'SF', 'TB', 'TEN', 'WAS'
-]
-
-const chartData = document.querySelector('#chartdata')
-
 const url = 'http://127.0.0.1:5000'
-let year1 = ''
-let year2 = ''
-let team1 = ''
-let team2 = ''
 
-let color1Main = null
-let color1Secondary = null
-let color2Main = null
-let color2Secondary = null
+let year1 = null
+let year2 = null
+let team1 = null
+let team2 = null
 
-const categories = [
-    'PF Rank', 
-    'Passing Yds Rank', 
-    'Def Rushing Yds Rank', 
-    'PA Rank', 
-    'Def Passing Yds Rank', 
-    'Rushing Yds Rank',
-]
-
-const amounts1 = []
-const amounts2 = []
 let chart = null
+let table = null
 
 
 function generateTeams() {
+    
+    const teams = ['ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE', 
+            'DAL', 'DEN', 'DET', 'GB', 'HOU', 'IND', 'JAX', 'KC', 
+            'LAC', 'LAR', 'LV', 'MIA', 'MIN', 'NE', 'NO', 'NYG', 
+            'NYJ', 'PHI', 'PIT', 'SEA', 'SF', 'TB', 'TEN', 'WAS'
+    ]
     
     const teamCon = document.querySelector('.teamCon')
     let fragment = document.createDocumentFragment()
@@ -74,17 +58,14 @@ function generateTeams() {
                         team2 = e.target.id
                         e.target.parentElement.classList.add('clickedT2')
                         prevTeam = 'team2'
-                        console.log(prevTeam)
                     } else {
                         let prevTeamDiv = document.getElementById(`${team1}`)
                         prevTeamDiv.parentElement.classList.remove('clickedT1')
                         team1 = e.target.id
                         e.target.parentElement.classList.add('clickedT1')
                         prevTeam = 'team1'
-                        console.log(prevTeam)
                     }
                 }
-                
                 return 
             } 
             
@@ -95,17 +76,22 @@ function generateTeams() {
                     e.target.parentElement.classList.add('clickedT2')
                     teamCount++
                     prevTeam = 'team2'
-                    console.log(prevTeam)
                 } else {
                     team1 = e.target.id
                     e.target.parentElement.classList.add('clickedT1')
                     teamCount++
                     prevTeam = 'team1'
-                    console.log(prevTeam)
                 }
             }
-            // console.log(`T1: ${team1}, T2: ${team2}, TC: ${teamCount}`)
         })
+        div.addEventListener('click', () => {
+            if (chart && team1 && team2) {
+                const modalButton = document.querySelector('[data-modal-target]')
+                modalButton.setAttribute('hidden', true)
+                chartData.removeAttribute('hidden')
+            }
+        })
+        
         fragment.appendChild(div)
     }
     teamCon.appendChild(fragment)
@@ -139,14 +125,24 @@ function generateYear() {
     }
     
     season1Selector.addEventListener('change', e => {
+        if (chart) {
+            const modalButton = document.querySelector('[data-modal-target]')
+            modalButton.setAttribute('hidden', true)
+            chartData.removeAttribute('hidden')
+        } 
         year1 = e.target.value
     })
     season2Selector.addEventListener('change', e => {
+        if (chart) {
+            const modalButton = document.querySelector('[data-modal-target]')
+            modalButton.setAttribute('hidden', true)
+            chartData.removeAttribute('hidden')
+        }
         year2 = e.target.value
     })
 }
 
-async function giveData() {
+async function getData() {
     
     const response = await fetch(url + '/postmethod', {
         method: 'POST',
@@ -161,40 +157,81 @@ async function giveData() {
         }
     })
     
-    const data = await response.json()
+    let data = await response.json()
+    data = transformData(data)
 
-    return [data]
+    return data
 }
 
-async function getData() {
-    
-    const response = await fetch(url + '/getmethod')
-    const data = await response.json()
-    
+function transformData(data) {
+    // Pull in data and split into two json objects for each team
     let string = data.split('/')
     let json1 = JSON.parse(string[0].replaceAll("'",'"'))
     let json2 = JSON.parse(string[1].replaceAll("'",'"'))
     
-        for (let i = 0; i < categories.length; i++) {
-            amounts1[i] = 33 - json1[`${categories[i]}`]
-            amounts2[i] = 33 - json2[`${categories[i]}`]
-        }  
-        
-        year1 = json1['season']
-        year2 = json2['season']
-        team1 = json1['team']
-        team2 = json2['team']
-        color1Main = json1['team_color']
-        color1Secondary = json1['team_color2']
-        color2Main = json2['team_color']
-        color2Secondary = json2['team_color2']
+    // Transform Chart Data
+    let ranks1 = []
+    let ranks2 = []
+    let season1 = null
+    let season2 = null
+    let color1Main = null
+    let color1Secondary = null
+    let color2Main = null
+    let color2Secondary = null
     
+    const chartCategories = [
+        'PF Rank', 
+        'Passing Yds Rank', 
+        'Def Rushing Yds Rank', 
+        'PA Rank', 
+        'Def Passing Yds Rank', 
+        'Rushing Yds Rank',
+    ]
     
-    return [amounts1, amounts2]
+    for (let i = 0; i < chartCategories.length; i++) {
+        ranks1[i] = 33 - json1[`${chartCategories[i]}`]
+        ranks2[i] = 33 - json2[`${chartCategories[i]}`]
+    }  
+    
+    // Transform Table Data
+    let stats1 = []
+    let stats2 = []
+    
+    const tableCategories = [
+        'Record',
+        'PF',
+        'PA',
+        'Passing Yds',
+        'Def Passing Yds',
+        'Rushing Yds',
+        'Def Rushing Yds',
+        'Key Player'
+    ]
+    
+    for (let i = 0; i < tableCategories.length; i++) {
+        stats1[i] = json1[`${tableCategories[i]}`]
+        stats2[i] = json2[`${tableCategories[i]}`]
+    }
+
+    return {
+        chartCategories: chartCategories,
+        ranks1: ranks1,
+        ranks2: ranks2,
+        season1: json1['season'],
+        season2: json2['season'],
+        team1: json1['team'],
+        team2: json2['team'],
+        color1Main: json1['team_color'],
+        color1Secondary: json1['team_color2'],
+        color2Main: json2['team_color'],
+        color2Secondary: json2['team_color2'],
+        stats1: stats1,
+        stats2: stats2,
+    }
 }
 
 async function makeChart() {
-    const [data1, data2] = await Promise.all([await giveData(), getData()]);
+    const data = await getData()
         
     let options = {
         chart: {
@@ -208,24 +245,24 @@ async function makeChart() {
         },
         series: [
           {
-            name: `${year1} ${team1}`,
-            data: amounts1
+            name: `${data.season1} ${data.team1}`,
+            data: data.ranks1
           },
           {
-            name: `${year2} ${team2}`,
-            data: amounts2
+            name: `${data.season2} ${data.team2}`,
+            data: data.ranks2
           }
         ],
-        labels: categories,
+        labels: data.chartCategories,
         stroke: {
-          colors: [color1Main, color2Main],  
+          colors: [data.color1Main, data.color2Main],  
         },
         markers: {
-            colors: [color1Main, color2Main]
+            colors: [data.color1Main, data.color2Main]
         },
         fill: {
             opacity: 0.1,
-            colors: [color1Secondary, color2Secondary],
+            colors: [data.color1Secondary, data.color2Secondary],
         },
         xaxis: {
             labels: {
@@ -261,8 +298,8 @@ async function makeChart() {
         legend: {
             markers: {
                 strokeWidth: 2,
-                strokeColor: [color1Main, color2Main],
-                fillColors: [color1Secondary, color2Secondary],
+                strokeColor: [data.color1Main, data.color2Main],
+                fillColors: [data.color1Secondary, data.color2Secondary],
                 useSeriesColors: false
             },
         },
@@ -277,14 +314,102 @@ async function makeChart() {
     
 }
 
+async function makeTable() {
+    let data = await getData()
+    
+    let table = document.querySelector('table')
+    let header = true;
+    const tableLabels = [
+        'Record',
+        'Points For',
+        'Points Allowed',
+        'Passing Yards',
+        'Passing Yards Allowed',
+        'Rushing Yards',
+        'Rushing Yards Allowed',
+        'Team MVP'
+    ]
+    if (table) {
+        table.innerHTML = ''
+    }
+    for (let i = 0; i < tableLabels.length; i++) {
+        if (header) {
+            let row = 
+                `
+                <tr class='top'>
+                    <th> ${data.season1} ${data.team1} </th>
+                    <th class='middle'> </th>
+                    <th> ${data.season2} ${data.team2} </th>
+                </tr>
+                `
+            table.innerHTML += row
+            header = false;
+        }
+        let row = 
+            `
+            <tr>
+                <td> ${data.stats1[i]} </th>
+                <td class='middle'> ${tableLabels[i]} </td>
+                <td> ${data.stats2[i]} </td>
+            </tr>
+            `
+        table.innerHTML += row
+    }
+    table = true;
+}
+
 generateTeams()
 generateYear()
 
+const chartData = document.querySelector('#chartdata')
 chartdata.addEventListener('click', () => {
     
     makeChart()
     const openModalButtons = document.querySelector('[data-modal-target]')
     openModalButtons.removeAttribute('hidden')
     chartData.setAttribute('hidden', true)
-    
+
 })
+
+// Modal popup
+
+const openModalButtons = document.querySelectorAll('[data-modal-target]')
+const closeModalButtons = document.querySelectorAll('[data-close-button]')
+const overlay = document.getElementById('overlay')
+
+openModalButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const modal = document.querySelector(button.dataset.modalTarget)
+    makeTable()
+    openModal(modal)
+    
+    let tableData = getData()
+    console.log(tableData)
+  })
+})
+
+overlay.addEventListener('click', () => {
+  const modals = document.querySelectorAll('.modal.active')
+  modals.forEach(modal => {
+    closeModal(modal)
+  })
+})
+
+closeModalButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const modal = button.closest('.modal')
+    closeModal(modal)
+  })
+})
+
+function openModal(modal) {
+  if (modal == null) return
+  modal.classList.add('active')
+  overlay.classList.add('active')
+}
+
+function closeModal(modal) {
+  if (modal == null) return
+  modal.classList.remove('active')
+  overlay.classList.remove('active')
+}

@@ -4,8 +4,8 @@ import pandas as pd
 def load_data():
 
   # Pulls offensive stats (organize, add columns, and rank).
-  # df_offense = pd.read_csv(r"csv/Clean NFL Offense Stats (2002 - 2022).csv")
-  df_offense = pd.read_csv('/Users/dominicsantini/Downloads/CSV/Clean NFL Offense Stats (2002 - 2022).csv')
+  df_offense = pd.read_csv('CSV/Clean NFL Offense Stats (2002 - 2022).csv')
+
   df_offense = df_offense[['Rk', 'Tm', 'PF', 'Passing Yds', 'Rushing Yds ', 'Season']]
   df_offense['PF Rank'] = df_offense.groupby("Season")["PF"].rank(method="dense", ascending=False)
   df_offense['Passing Yds Rank'] = df_offense.groupby("Season")["Passing Yds"].rank(method="dense", ascending=False)
@@ -13,8 +13,7 @@ def load_data():
   df_offense = df_offense.rename(columns={"Rushing Yds ": "Rushing Yds"})
 
   # Pulls defensive stats (organize, add columns, and rank).
-  # df_defense = pd.read_csv(r"Clean NFL Defense Stats (2002 - 2022).csv")
-  df_defense = pd.read_csv('/Users/dominicsantini/Downloads/CSV/Clean NFL Defense Stats (2002 - 2022).csv')
+  df_defense = pd.read_csv('CSV/Clean NFL Defense Stats (2002 - 2022).csv')
 
   df_defense = df_defense[['Rk', 'Tm', 'PA', 'Passing Yds','Rushing Yds', 'Season']]
   df_defense['PA Rank'] = df_defense.groupby("Season")["PA"].rank(method="dense", ascending=True)
@@ -23,13 +22,13 @@ def load_data():
   df_defense = df_defense.rename(columns={"Passing Yds": "Def Passing Yds", "Rushing Yds": "Def Rushing Yds"})
 
   # Pulls key player for every team for every season.
-  df_key_players = pd.read_csv('/Users/dominicsantini/Downloads/CSV/NFL Key Players (2002 through 2022).csv')
+  df_key_players = pd.read_csv('CSV/NFL Key Players (2002 through 2022).csv')
 
   # Pulls team colors.
-  df_team_colors = pd.read_csv('/Users/dominicsantini/Downloads/CSV/teamcolors.csv')
+  df_team_colors = pd.read_csv('CSV/teamcolors.csv')
 
   # Pulls team's win/loss record for season.
-  df_records = pd.read_csv('/Users/dominicsantini/Downloads/CSV/nfl_wins_losses.csv')
+  df_records = pd.read_csv('CSV/nfl_wins_losses.csv')
 
   dataframes = [df_offense, df_defense, df_key_players, df_team_colors, df_records]
 

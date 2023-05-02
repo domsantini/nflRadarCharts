@@ -28,44 +28,30 @@ def home():
 def getData():
     global Team1, Team2, Season1, Season2
     
-    print(f'LINE 33: {Team1}, {Team2}, {Season1}, {Season2}')
+    print(f'LINE 31: {Team1}, {Team2}, {Season1}, {Season2}')
     
     data = request.get_json()
     
+    print(f'LINE 35: {data}')
+    
     Season1 = data['Season1']
     Season2 = data['Season2']
-
     Team1 = data['Team1']
     Team2 = data['Team2']
         
     Team1 = teams[f'{Team1}']
     Team2 = teams[f'{Team2}']
-    
-    session['Season1'] = Season1
-    session['Season2'] = Season2
-    session['Team1'] = Team1
-    session['Team2'] = Team2
-    
-    print(f'LINE 51: {Team1}, {Team2}, {Season1}, {Season2}')
-    
-    return jsonify(Season1=Season1, Season2=Season2, Team1=Team1, Team2=Team2)
+     
+    print(f'LINE 45: {Team1}, {Team2}, {Season1}, {Season2}')
 
-
-@app.route('/getmethod')
-def passData():
-
-    print(f'LINE 59: {Team1}, {Team2}, {Season1}, {Season2}')
-
-    # dictionaries = get_dictionaries(Team1, int(Season1), Team2, int(Season2))
     dictionaries = get_dictionaries(dataframes, Team1, int(Season1), Team2, int(Season2))
     first_team = dictionaries[0]
     second_team = dictionaries[1]
 
-    print(f'LINE 65: {first_team}')
-    print(f'LINE 66: {second_team}')
+    print(f'LINE 51: {first_team}')
+    print(f'LINE 52: {second_team}')
     
     return jsonify('{}/{}'.format(first_team, second_team))
-
     
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
