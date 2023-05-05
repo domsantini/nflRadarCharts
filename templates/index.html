@@ -4,33 +4,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/logos/aFootball.png">
+    <!-- <link rel="icon" href="/logos/aFootball.png"> -->
+    <link rel="icon" href="{{ url_for('static', filename='/logos/aFootball.png') }}">
     <title>NFL Radar Charts</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital@1&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="styles.css">
-    <script src="radar.js" defer></script>
-    <!-- <script src="popup.js" defer></script>  -->
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <!-- <script src="radar.js" defer></script> -->
+    <script src="{{ url_for('static', filename='radar.js') }}" defer></script>
+
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body>    
+<body>
     <div class="container">
+        <div id="mobileMessage">Thank you for visiting nflRadarCharts! <br> We're not yet optimized for mobile, so feel free to check us out on your nearest desktop device.</div>  
         <div class="controlsCon">
-            <h3>Pick your seasons <span id='tt1' data-tooltip1='Our methodology ranks for a given season. When comparing different years, make sure to take a look at the numbers for a true stat comparison.'>*</span> : </h3>
+            <h3>Pick your seasons<span id='tt1' data-tooltip1='Our methodology ranks for a given season. When comparing different years, make sure to take a look at the numbers for a true stat comparison.'>*</span>:</h3>
             <div class="yearCon">
-                <select id='season1Selector' name='year' class="seasonSelect">
+                <select id='season1Selector' class="seasonSelect">
                 
                 </select>
-                <select id='season2Selector' name='year' class="seasonSelect"> 
+                <select id='season2Selector' class="seasonSelect"> 
                 
                 </select>
             </div>
             
-            <h3>Pick your teams <span id='tt2' data-tooltip2='When picking your teams, Team 1 will be denoted with a blue background, while Team 2 will have a gray background. You can also select a team twice and compare different seasons. To select new teams, keep clicking!'>*</span> : </h3>
+            <h3>Pick your teams<span id='tt2' data-tooltip2='When picking your teams, Team 1 will be denoted with a blue background, while Team 2 will have a gray background. You can also select a team twice and compare different seasons. To select new teams, keep clicking!'>*</span>:</h3>
             <div class="teamCon">
 
             </div>

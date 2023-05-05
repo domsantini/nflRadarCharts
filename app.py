@@ -1,6 +1,6 @@
 from helper import get_dictionaries, load_data
 from flask_cors import CORS
-from flask import Flask, jsonify, request, session
+from flask import Flask, jsonify, request, render_template
 
 app = Flask(__name__)
 app.secret_key = 'mysecretkey'
@@ -22,7 +22,7 @@ dataframes = load_data()
 
 @app.route("/")
 def home():
-    return 'connected to flask'
+    return render_template('index.html')
 
 @app.route('/postmethod', methods=['POST'])
 def getData():

@@ -15,7 +15,33 @@ body {
     gap: 75px;
     padding: 0 50px;
 }
-
+#mobileMessage {
+    display: none;
+}
+@media (max-width: 500px) {
+    div.container {
+        display: flex;
+        margin: 5px;
+        height: 100%;
+        width: 100%;
+    }
+    div#mobileMessage {
+        display: block;
+        margin: 10px;
+        padding: 5px;
+        border: 2px solid gray;
+        background-color: whitesmoke;
+        text-align: center;
+        line-height: 1.5em;
+        
+    }
+    div.chartCon, div.controlsCon {
+        display: none;
+    }
+    footer {
+        font-size: small;
+    }
+}
 /* Control box styling */
 
 .controlsCon {
@@ -41,6 +67,7 @@ body {
     font-family: 'Roboto Condensed', sans-serif;
     height: 40px;
     width: 100%;
+    cursor: pointer;
 }
 .teamCon {
     display: grid;
@@ -55,7 +82,7 @@ body {
     box-sizing: border-box;
     border-spacing: 0;
     border: 1px solid lightgray;
-    padding: 1px;
+    padding: 2px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -65,6 +92,7 @@ body {
 }
 .teamGrid > img:hover {
     opacity: 0.5;
+    cursor: pointer; 
 }
 .teamGrid > img {
     display: flex;
@@ -97,11 +125,15 @@ body {
 button {
     font-family: 'Roboto Condensed', sans-serif;
     padding: 5px 10px;
+    cursor: pointer;
 }
 
 /* Chart box styling */
 
 .chartCon {
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
     border: 3px solid gray;
     border-radius: 3px;
     background-color: whitesmoke;
@@ -115,7 +147,10 @@ canvas {
 }
 #chart {
     max-width: 100%;
-    max-height: 100%
+    max-height: 100%;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
 }
 footer {
     margin: 25px auto;
@@ -126,7 +161,12 @@ footer > span {
     font-size: larger;
     font-weight:bold;
 }
-
+#errorMessage {
+    font-size: x-large;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
 /* Stat pop-up styling */
 
 table {
@@ -212,6 +252,7 @@ td {
 
 h3 > span {
     color: red;
+    cursor: pointer;
 }
 #tt1,
 #tt2 {
@@ -274,11 +315,11 @@ table {
     border-collapse: collapse;
 }
 th{
-    padding: 1px 5px;
+    padding: 2px 5px;
 }
 td {
     text-align: center;
-    padding: 1px 5px;
+    padding: 2px 5px;
 }
 .top {
     border-bottom: 1px solid black;

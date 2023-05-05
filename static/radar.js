@@ -1,5 +1,6 @@
 const url = 'http://127.0.0.1:5000'
 
+// Declare global variables
 let year1 = null
 let year2 = null
 let team1 = null
@@ -10,17 +11,13 @@ let table = null
 
 
 function generateTeams() {
-    
     const teams = ['ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE', 
             'DAL', 'DEN', 'DET', 'GB', 'HOU', 'IND', 'JAX', 'KC', 
             'LAC', 'LAR', 'LV', 'MIA', 'MIN', 'NE', 'NO', 'NYG', 
             'NYJ', 'PHI', 'PIT', 'SEA', 'SF', 'TB', 'TEN', 'WAS'
     ]
-    
     const teamCon = document.querySelector('.teamCon')
     let fragment = document.createDocumentFragment()
-    let teamCount = 0
-    let prevTeam = null
     
     for (let i = 0; i < teams.length; i++) {
         
@@ -29,53 +26,50 @@ function generateTeams() {
         div.id = `${teams[i]}Grid`
         
         let img = document.createElement('img')
-        img.src = `logos/${teams[i]}.png`
+        img.src = `static/logos/${teams[i]}.png`
         img.classList = 'teamGrid'
         img.id = teams[i]
         
         div.appendChild(img)
-        
+        fragment.appendChild(div)
+    }
+    teamCon.appendChild(fragment)
+}
+
+function addTeamListener() {
+    const teamGrid = document.querySelectorAll('div.teamGrid')
+    let teamCount = 0
+    let prevTeam = null
+    
+    teamGrid.forEach(div => {
         div.addEventListener('click', e => {
             
             if (team1 && team2) {
-            
                 if (e.target.parentElement.classList.contains('clickedT1')) {
-                    let prevTeamDiv = document.getElementById(`${team2}`)
-                    prevTeamDiv.parentElement.classList.remove('clickedT2')
-                    team2 = e.target.id
-                    e.target.parentElement.classList.add('clickedT2')
-                                        
+                    handleTeam2(e)
+                    
                 } else if (e.target.parentElement.classList.contains('clickedT2')) {
-                    let prevTeamDiv = document.getElementById(`${team1}`)
-                    prevTeamDiv.parentElement.classList.remove('clickedT1')
-                    team1 = e.target.id
-                    e.target.parentElement.classList.add('clickedT1')
+                    handleTeam1(e)
                     
                 } else {
                     if (prevTeam === 'team1') {
-                        let prevTeamDiv = document.getElementById(`${team2}`)
-                        prevTeamDiv.parentElement.classList.remove('clickedT2')
-                        team2 = e.target.id
-                        e.target.parentElement.classList.add('clickedT2')
+                        handleTeam2(e)
                         prevTeam = 'team2'
+                        
                     } else {
-                        let prevTeamDiv = document.getElementById(`${team1}`)
-                        prevTeamDiv.parentElement.classList.remove('clickedT1')
-                        team1 = e.target.id
-                        e.target.parentElement.classList.add('clickedT1')
+                        handleTeam1(e)
                         prevTeam = 'team1'
                     }
                 }
                 return 
             } 
-            
             if (teamCount < 2) {
-                
                 if (team1) {
                     team2 = e.target.id
                     e.target.parentElement.classList.add('clickedT2')
                     teamCount++
                     prevTeam = 'team2'
+                    
                 } else {
                     team1 = e.target.id
                     e.target.parentElement.classList.add('clickedT1')
@@ -86,81 +80,104 @@ function generateTeams() {
         })
         div.addEventListener('click', () => {
             if (chart && team1 && team2) {
-                const modalButton = document.querySelector('[data-modal-target]')
-                modalButton.setAttribute('hidden', true)
-                chartData.removeAttribute('hidden')
+                hideStatButton()
             }
         })
-        
-        fragment.appendChild(div)
-    }
-    teamCon.appendChild(fragment)
+    })
 }
 
-function generateYear() {
-    const season1Selector = document.querySelector('#season1Selector')
-    const season2Selector = document.querySelector('#season2Selector')
+function handleTeam1(e) {
+    let prevTeamDiv = document.getElementById(`${team1}`)
+    prevTeamDiv.parentElement.classList.remove('clickedT1')
+    team1 = e.target.id
+    e.target.parentElement.classList.add('clickedT1')
+}
+
+function handleTeam2(e) {
+    let prevTeamDiv = document.getElementById(`${team2}`)
+    prevTeamDiv.parentElement.classList.remove('clickedT2')
+    team2 = e.target.id
+    e.target.parentElement.classList.add('clickedT2')
+}
+
+function generateSeason() {
+    const yearSelectors = document.querySelectorAll('.seasonSelect')
     let fragment = document.createDocumentFragment()
     
-    for (let i = 1; i < 3; i++) {
-        
+    yearSelectors.forEach(selector => {
+    
         let option = document.createElement('option')
-        option.text = `Team ${i} Season`
+        if (selector.id == 'season1Selector') {
+            option.text = 'Team 1 Season'
+        } else {
+            option.text = 'Team 2 Season'
+        }
+        
         option.selected = true;
         fragment.appendChild(option)
         
-        for (let j = 2022; j > 2001; j--) {
+        for (let i = 2022; i > 2001; i--) {
             
             let option = document.createElement('option')            
-            option.value = j
-            option.text = `${j}`
+            option.value = i
+            option.text = `${i}`
             
             fragment.appendChild(option)
         }
-        if (i == 1){
-            season1Selector.appendChild(fragment)
-        } else {
-            season2Selector.appendChild(fragment)
-        }
-    }
-    
-    season1Selector.addEventListener('change', e => {
-        if (chart) {
-            const modalButton = document.querySelector('[data-modal-target]')
-            modalButton.setAttribute('hidden', true)
-            chartData.removeAttribute('hidden')
-        } 
-        year1 = e.target.value
-    })
-    season2Selector.addEventListener('change', e => {
-        if (chart) {
-            const modalButton = document.querySelector('[data-modal-target]')
-            modalButton.setAttribute('hidden', true)
-            chartData.removeAttribute('hidden')
-        }
-        year2 = e.target.value
+        selector.appendChild(fragment)
     })
 }
 
-async function getData() {
+function addSeasonListener() {
+    const yearSelectors = document.querySelectorAll('.seasonSelect')
     
-    const response = await fetch(url + '/postmethod', {
-        method: 'POST',
-        body: JSON.stringify({
-            Team1: team1,
-            Team2: team2,
-            Season1: year1,
-            Season2: year2,
-        }),
-        headers: {
-            'Content-type': 'application/json; charset=UTF-8'
-        }
+    yearSelectors.forEach(selector => {
+        selector.addEventListener('change', e => {
+            if (chart) {
+                hideStatButton()
+            }
+            if (selector.id == 'season1Selector') {
+                year1 = e.target.value
+            } else {
+                year2 = e.target.value
+            }
+        })
     })
-    
-    let data = await response.json()
-    data = transformData(data)
+}
 
-    return data
+function hideStatButton() {
+    const modalButton = document.querySelector('[data-modal-target]')
+    modalButton.setAttribute('hidden', true)
+    chartData.removeAttribute('hidden')
+}
+
+async function getData() {
+    try {
+        const response = await fetch(url + '/postmethod', {
+            method: 'POST',
+            body: JSON.stringify({
+                Team1: team1,
+                Team2: team2,
+                Season1: year1,
+                Season2: year2,
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            }
+        })
+        
+        let data = await response.json()
+        data = transformData(data)
+    
+        return data
+        
+    } catch (error) {
+        const chart = document.querySelector('#chart')
+        let errorMessage = document.createElement('span')
+        errorMessage.id = 'errorMessage'
+        errorMessage.innerHTML = 'Whoops! <br> Looks like we encountered an error. <br> Try refreshing the page.'
+        chart.appendChild(errorMessage)
+    }
 }
 
 function transformData(data) {
@@ -212,7 +229,8 @@ function transformData(data) {
         stats1[i] = json1[`${tableCategories[i]}`]
         stats2[i] = json2[`${tableCategories[i]}`]
     }
-
+    
+    // Return all data to be used by makeChart()
     return {
         chartCategories: chartCategories,
         ranks1: ranks1,
@@ -230,9 +248,9 @@ function transformData(data) {
     }
 }
 
-async function makeChart() {
-    const data = await getData()
-        
+async function makeChart(data) {
+    
+    // Long block of code here for the chart styling
     let options = {
         chart: {
             width: '100%',
@@ -240,7 +258,6 @@ async function makeChart() {
             fontFamily: 'Roboto Condensed, sans-serif',
             type: 'radar',
             toolbar: {
-            //   offsetX: -20,  
             },
         },
         series: [
@@ -258,7 +275,8 @@ async function makeChart() {
           colors: [data.color1Main, data.color2Main],  
         },
         markers: {
-            colors: [data.color1Main, data.color2Main]
+            colors: [data.color1Main, data.color2Main],
+            size: 3,
         },
         fill: {
             opacity: 0.1,
@@ -314,9 +332,8 @@ async function makeChart() {
     
 }
 
-async function makeTable() {
-    let data = await getData()
-    
+async function makeTable(data) {
+        
     let table = document.querySelector('table')
     let header = true;
     const tableLabels = [
@@ -329,6 +346,7 @@ async function makeTable() {
         'Rushing Yards Allowed',
         'Team MVP'
     ]
+    
     if (table) {
         table.innerHTML = ''
     }
@@ -358,20 +376,23 @@ async function makeTable() {
     table = true;
 }
 
-generateTeams()
-generateYear()
+async function main() {
+    let data = await getData()
+    makeChart(data)
+    makeTable(data)
+}
 
 const chartData = document.querySelector('#chartdata')
 chartdata.addEventListener('click', () => {
     
-    makeChart()
+    main()
     const openModalButtons = document.querySelector('[data-modal-target]')
     openModalButtons.removeAttribute('hidden')
     chartData.setAttribute('hidden', true)
 
 })
 
-// Modal popup
+// Stats popup
 
 const openModalButtons = document.querySelectorAll('[data-modal-target]')
 const closeModalButtons = document.querySelectorAll('[data-close-button]')
@@ -380,16 +401,13 @@ const overlay = document.getElementById('overlay')
 openModalButtons.forEach(button => {
   button.addEventListener('click', () => {
     const modal = document.querySelector(button.dataset.modalTarget)
-    makeTable()
     openModal(modal)
-    
-    let tableData = getData()
-    console.log(tableData)
   })
 })
 
 overlay.addEventListener('click', () => {
   const modals = document.querySelectorAll('.modal.active')
+  console.log(modals)
   modals.forEach(modal => {
     closeModal(modal)
   })
@@ -412,4 +430,11 @@ function closeModal(modal) {
   if (modal == null) return
   modal.classList.remove('active')
   overlay.classList.remove('active')
+}
+
+window.onload = () => {
+    generateTeams()
+    addTeamListener()
+    generateSeason()
+    addSeasonListener()
 }

@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"name": "nflRadarCharts",
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "nflRadarCharts"
+	}
+}
