@@ -230,7 +230,7 @@ function transformData(data) {
         stats2[i] = json2[`${tableCategories[i]}`]
     }
     
-    // Return all data to be used by makeChart()
+    // Return all data to be used by makeChart() and makeTable()
     return {
         chartCategories: chartCategories,
         ranks1: ranks1,
@@ -389,7 +389,6 @@ chartdata.addEventListener('click', () => {
     const openModalButtons = document.querySelector('[data-modal-target]')
     openModalButtons.removeAttribute('hidden')
     chartData.setAttribute('hidden', true)
-
 })
 
 // Stats popup
@@ -407,7 +406,6 @@ openModalButtons.forEach(button => {
 
 overlay.addEventListener('click', () => {
   const modals = document.querySelectorAll('.modal.active')
-  console.log(modals)
   modals.forEach(modal => {
     closeModal(modal)
   })

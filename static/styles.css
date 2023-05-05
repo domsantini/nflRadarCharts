@@ -131,9 +131,6 @@ button {
 /* Chart box styling */
 
 .chartCon {
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
     border: 3px solid gray;
     border-radius: 3px;
     background-color: whitesmoke;
@@ -148,9 +145,6 @@ canvas {
 #chart {
     max-width: 100%;
     max-height: 100%;
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
 }
 footer {
     margin: 25px auto;
@@ -162,6 +156,8 @@ footer > span {
     font-weight:bold;
 }
 #errorMessage {
+    display: flex;
+    transform: translateY(100%);
     font-size: x-large;
     justify-content: center;
     align-items: center;
