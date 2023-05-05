@@ -383,14 +383,20 @@ async function main() {
 }
 
 const chartData = document.querySelector('#chartdata')
+
 chartData.addEventListener('click', () => {
+    let errorMessage = document.getElementById('errorMessage')
+    const chart = document.querySelector('#chart')
+    
     if (team1 && team2 && year1 && year2) {
+        if (errorMessage) {
+            chart.removeChild(errorMessage)    
+        }         
         main()
         const openModalButtons = document.querySelector('[data-modal-target]')
         openModalButtons.removeAttribute('hidden')
         chartData.setAttribute('hidden', true)
     } else {
-        const chart = document.querySelector('#chart')
         let errorMessage = document.createElement('span')
         errorMessage.id = 'errorMessage'
         errorMessage.innerHTML = 'Hmm.. Seems like you\'re missing an input. <br> Take another look.'
