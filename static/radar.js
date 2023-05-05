@@ -383,12 +383,20 @@ async function main() {
 }
 
 const chartData = document.querySelector('#chartdata')
-chartdata.addEventListener('click', () => {
-    
-    main()
-    const openModalButtons = document.querySelector('[data-modal-target]')
-    openModalButtons.removeAttribute('hidden')
-    chartData.setAttribute('hidden', true)
+chartData.addEventListener('click', () => {
+    if (team1 && team2 && year1 && year2) {
+        main()
+        const openModalButtons = document.querySelector('[data-modal-target]')
+        openModalButtons.removeAttribute('hidden')
+        chartData.setAttribute('hidden', true)
+    } else {
+        const chart = document.querySelector('#chart')
+        let errorMessage = document.createElement('span')
+        errorMessage.id = 'errorMessage'
+        errorMessage.innerHTML = 'Hmm.. Seems like you\'re missing an input. <br> Take another look.'
+        chart.appendChild(errorMessage)
+        return
+    }
 })
 
 // Stats popup
